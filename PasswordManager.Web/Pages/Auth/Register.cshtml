@@ -1,0 +1,70 @@
+@page "/register"
+@model PasswordManager.Web.Pages.Auth.Register
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+    $(document).ready(function () {
+        let showPasswordDifferentError = false
+        
+        const confirmPasswordNodeSelector = 'input[name="RegisterForm.ConfirmPassword"]'
+        const passwordNodeSelector = 'input[name="RegisterForm.Password"]';
+       
+        function toggleError() {
+            if (showPasswordDifferentError) {
+                $(confirmPasswordNodeSelector).addClass("is-invalid");
+            } else {
+                $(confirmPasswordNodeSelector).removeClass("is-invalid");
+            }
+        }
+        
+        function onPasswordChange(event) {
+            let password = $(passwordNodeSelector).val();
+            let confirmPassword = $(confirmPasswordNodeSelector).val();
+            
+            showPasswordDifferentError = password !== confirmPassword;
+            
+            toggleError();
+        }
+        
+        $(passwordNodeSelector).change(onPasswordChange);
+        $(confirmPasswordNodeSelector).change(onPasswordChange);
+    });
+    </script>
+}
+
+<div class="d-flex">
+    <div class="w-50 d-flex flex-column mx-auto my-5 p-5 bg-light rounded">
+        <h5 class="card-title mb-0">register</h5>
+        <small class="d-block mb-3 text-muted">already have an account? <a asp-page="Login">login here</a>.</small>
+        <form method="post" asp-page-handler="register" class="row">
+            <div class="form-group col-6">
+                <input type="text" asp-for="RegisterForm.Firstname" class="form-control" placeholder="firstname"/>
+                <small class="text-muted">enter your firstname.</small>
+            </div>
+            <div class="form-group col-6">
+                <input type="text" asp-for="RegisterForm.Lastname" class="form-control" placeholder="lastname"/>
+                <small class="text-muted">enter your lastname.</small>
+            </div>
+            <div class="form-group col-12">
+                <input type="text" asp-for="RegisterForm.Email" class="form-control" placeholder="email"/>
+                <small class="text-muted">enter your email address.</small>
+            </div>
+            <div class="form-group col-12">
+                <input type="password" asp-for="RegisterForm.Password" class="form-control" placeholder="password"/>
+                <small class="text-muted">enter your password.</small>
+            </div>
+            <div class="form-group col-12">
+                <input type="password" asp-for="RegisterForm.ConfirmPassword" class="form-control" placeholder="confirm password"/>
+                <small class="text-muted">confirm your password.</small>
+            </div>
+            <div class="col-12 d-flex">
+                <button class="btn btn-primary ml-auto">register</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+@page "/account"
+@model PasswordManager.Web.Pages.Account.Index
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+<div class="card mb-5">
+    <div class="card-body">
+        <form class="row" method="post">
+            <div class="form-group col-12">
+                <label>ID</label>
+                <input type="text" readonly class="form-control" value="@Model.CurrentUser.Id"/>
+            </div>
+            <div class="form-group col-6">
+                <label>Firstname</label>
+                <input type="text" class="form-control" asp-for="Form.Firstname"/>
+            </div>
+            <div class="form-group col-6">
+                <label>Lastname</label>
+                <input type="text" class="form-control" asp-for="Form.Lastname"/>
+            </div>
+            <div class="form-group col-12">
+                <label>Email</label>
+                <input type="email" class="form-control" asp-for="Form.Email"/>
+            </div>
+            <div class="form-group col-6">
+                <label>Salt</label>
+                <input type="text" readonly class="form-control" value="@Model.CurrentUser.PasswordSalt"/>
+            </div>
+            <div class="form-group col-6">
+                <label>Hash</label>
+                <input type="text" readonly class="form-control" value="@Model.CurrentUser.PasswordHash"/>
+            </div>
+            <div class="form-group col-6">
+                <label>CreatedAt</label>
+                <input type="text" readonly class="form-control" value="@Model.CurrentUser.CreatedAt"/>
+            </div>
+            <div class="form-group col-6">
+                <label>UpdatedAt</label>
+                <input type="text" readonly class="form-control" value="@Model.CurrentUser.UpdatedAt"/>
+            </div>
+            <div class="col-12 d-flex">
+                <button type="submit" class="btn btn-primary ml-auto">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

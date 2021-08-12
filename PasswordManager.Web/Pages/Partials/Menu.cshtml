@@ -1,0 +1,20 @@
+@model PasswordManager.Web.Models.InjectedPageModel
+
+@{
+    var menus = new Dictionary<string, string>()
+    {
+        { "Dashboard", "/" },
+        { "Passwords", "/passwords" }
+    };
+}
+
+<div class="d-flex flex-column">
+    @foreach (var menuItem in menus)
+    {
+        <div class="d-flex align-items-center @(Model.Request.Path == menuItem.Value ? "bg-light" : string.Empty) py-3 px-4 rounded @(menus.Last().Key != menuItem.Key ? "mb-3" : string.Empty)">
+            <a class="text-decoration-none text-dark" href="@menuItem.Value">
+                <h5 class="mb-0">@menuItem.Key</h5>
+            </a>
+        </div>
+    }
+</div>

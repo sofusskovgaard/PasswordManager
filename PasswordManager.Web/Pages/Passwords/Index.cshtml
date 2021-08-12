@@ -1,0 +1,35 @@
+@page
+@model PasswordManager.Web.Pages.Passwords.Index
+
+@{
+    ViewData["Title"] = "Passwords";
+}
+
+<div class="d-flex">
+    <div class="w-25 mr-5">
+        @await Html.PartialAsync("Partials/Menu")
+    </div>
+    <div class="w-100">
+        <p>Passwords yo</p>
+        
+        <table class="w-100 table table-bordered">
+            <thead>
+            <tr>
+                <th>URL</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    https://google.com
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    https://facebook.com
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
