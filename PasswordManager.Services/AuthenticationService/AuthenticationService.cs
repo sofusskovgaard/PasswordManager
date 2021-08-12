@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -35,7 +36,7 @@ namespace PasswordManager.Services.AuthenticationService
         public async Task<JwtSecurityToken> Login(LoginCommand command)
         {
             var user = await _dataAccessService.Get<UserEntity>(Builders<UserEntity>.Filter.Eq(x => x.EMail, command.Email));
-
+            
             if (user == null)
             {
                 throw new ArgumentException("user does not exist");

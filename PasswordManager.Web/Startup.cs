@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PasswordManager.Data.DataAccessService;
 using PasswordManager.Services.AuthenticationService;
+using PasswordManager.Services.CryptographyService;
 using PasswordManager.Services.EntityServices.UsersEntityService;
 using PasswordManager.Services.PasswordHashingService;
 using PasswordManager.Services.TokenService;
@@ -37,6 +38,7 @@ namespace PasswordManager.Web
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordHashingService, PasswordHashingService>();
+            services.AddScoped<ICryptographyService, CryptographyService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddRazorPages()

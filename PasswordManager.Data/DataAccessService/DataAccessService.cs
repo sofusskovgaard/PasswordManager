@@ -23,8 +23,8 @@ namespace PasswordManager.Data.DataAccessService
         public DataAccessService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _client = new MongoClient(configuration.GetConnectionString("mongo"));
-            _database = _client.GetDatabase("password_manager");
+            _client = new MongoClient(_configuration.GetConnectionString("mongo"));
+            _database = _client.GetDatabase(_configuration["MongoDatabase"]);
         }
 
         public async Task<T> Get<T>(string id) where T : BaseEntity
@@ -43,6 +43,15 @@ namespace PasswordManager.Data.DataAccessService
             var query = await collection.FindAsync(filterDefinition);
 
             return await query.FirstOrDefaultAsync();
+        }
+        
+        public async Task<IEnumerable<T>> GetAll<T>(FilterDefinition<T> filterDefinition, int limit = 10, int skip = 0) where T : BaseEntity
+        {
+            var collection = _getCollection<T>();
+            
+            var query = await collection.FindAsync(filterDefinition, new FindOptions<T>() { Limit = limit, Skip = skip});
+
+            return await query.ToListAsync();
         }
 
         public async Task<T> Create<T>(T entity) where T : BaseEntity

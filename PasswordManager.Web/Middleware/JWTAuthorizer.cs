@@ -9,57 +9,51 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using PasswordManager.Data.DataAccessService;
 using PasswordManager.Data.Entities.User;
+using PasswordManager.Services.TokenService;
 
 namespace PasswordManager.Web.Middleware
 {
     public class JWTAuthorizer
     {
         private readonly RequestDelegate _next;
-        
-        private readonly IConfiguration _configuration;
 
         private readonly IDataAccessService _dataAccessService;
 
-        public JWTAuthorizer(RequestDelegate next, IConfiguration configuration, IDataAccessService dataAccessService)
+        public JWTAuthorizer(RequestDelegate next, IDataAccessService dataAccessService)
         {
             _next = next;
-            _configuration = configuration;
             _dataAccessService = dataAccessService;
         }
         
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, ITokenService tokenService)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last() ?? context.Request.Cookies["Authorization"]?.Split(" ").Last();
 
             if (!string.IsNullOrEmpty(token))
             {
-                await _injectUserInContext(context, token);
+                await _injectUserInContext(context, tokenService, token);
             }
 
             await _next(context);
         }
 
-        private async Task _injectUserInContext(HttpContext context, string token)
+        private async Task _injectUserInContext(HttpContext context, ITokenService tokenService, string token)
         {
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var secret = _configuration.GetSection("Jwt").GetValue<string>("secret");
-                var secretBytes = Encoding.ASCII.GetBytes(secret);
-
-                tokenHandler.ValidateToken(token, new TokenValidationParameters()
+                var tokenValid = tokenService.ValidateToken(token);
+        
+                if (!tokenValid)
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-
+                    // delete cookie to ensure this won't happen again
+                    context.Response.Cookies.Delete("Authorization");
+                    return;
+                };
+        
+                var jwtToken = new JwtSecurityToken(token);
+        
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
-
+        
                 context.Items.Add("User", await _dataAccessService.Get<UserEntity>(userId));
             }
             catch

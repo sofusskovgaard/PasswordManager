@@ -1,3 +1,4 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -27,19 +28,27 @@ namespace PasswordManager.Web.Pages.Auth
         
         public async Task<IActionResult> OnPost()
         {
-            if (ModelState.IsValid)
+            try
             {
-                var token = await AuthenticationService.Login(LoginForm);
-                if (token != null)
+                if (ModelState.IsValid)
                 {
-                    var handler = new JwtSecurityTokenHandler();
-                    Response.Cookies.Append("Authorization", $"Bearer {handler.WriteToken(token)}");
+                    var token = await AuthenticationService.Login(LoginForm);
+                    if (token != null)
+                    {
+                        var handler = new JwtSecurityTokenHandler();
+                        Response.Cookies.Append("Authorization", $"Bearer {handler.WriteToken(token)}");
 
-                    return RedirectToPage();
+                        return RedirectToPage();
+                    }
                 }
-            }
 
-            return Page();
+                return Page();
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("error", e.Message);
+                return Page();
+            }
         }
     }
 }

@@ -1,0 +1,31 @@
+﻿@page "/passwords/create"
+@model PasswordManager.Web.Pages.Passwords.Create
+
+@{
+    ViewData["Title"] = "Create new password";
+}
+
+<div>
+    <form class="row" method="post">
+        <div class="form-group col-6">
+            <input type="text" class="form-control" placeholder="example.com" asp-for="Form.URL" />
+            <small class="text-muted">What domain does this password relate to?</small>
+        </div>
+        <div class="form-group col-6">
+            <input type="text" class="form-control" placeholder="Example" asp-for="Form.Name" />
+            <small class="text-muted">What is the name of the service or site this password relates to?</small>
+        </div>
+        <div class="form-group col-6">
+            <input type="text" class="form-control" placeholder="example@mail.com" asp-for="Form.Username" />
+            <small class="text-muted">What is the username/email?</small>
+        </div>
+        <div class="form-group col-6">
+            <input type="password" class="form-control" placeholder="password" asp-for="Form.Password" />
+            <small class="text-muted">What is the password?</small>
+        </div>
+        <div class="col-12 d-flex">
+            <a asp-page="Index" class="btn btn-light ml-auto">Cancel</a>
+            <button type="submit" class="btn btn-primary ml-2">Create</button>
+        </div>
+    </form>
+</div>

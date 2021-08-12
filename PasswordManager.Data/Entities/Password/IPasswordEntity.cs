@@ -9,5 +9,7 @@ namespace PasswordManager.Data.Entities.Password
         string Username { get; set; }
         
         string Password { get; set; }
+        
+        string OwnerId { get; set; }
     }
 }

@@ -16,6 +16,6 @@ namespace PasswordManager.Data.Entities.Password
         public string Password { get; set; }
         
         [BsonRepresentation(BsonType.ObjectId)]
-        public string CategoryId { get; set; }
+        public string OwnerId { get; set; }
     }
 }

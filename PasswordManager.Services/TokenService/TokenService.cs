@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,33 @@ namespace PasswordManager.Services.TokenService
             };
             
             return tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+        }
+
+        public bool ValidateToken(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var secret = _configuration.GetSection("Jwt").GetValue<string>("secret");
+                var secretBytes = Encoding.ASCII.GetBytes(secret);
+
+                tokenHandler.ValidateToken(token, new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

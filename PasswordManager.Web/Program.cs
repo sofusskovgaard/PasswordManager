@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PasswordManager.Services.CryptographyService;
 
 namespace PasswordManager.Web
 {
@@ -13,6 +14,9 @@ namespace PasswordManager.Web
     {
         public static void Main(string[] args)
         {
+            // Create encryption keys.
+            CryptographyService.CreateEncryptionKeys();
+            
             CreateHostBuilder(args).Build().Run();
         }
 

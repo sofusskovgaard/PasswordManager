@@ -1,5 +1,7 @@
 @page
+@using PasswordManager.Services.CryptographyService
 @model PasswordManager.Web.Pages.Passwords.Index
+@inject ICryptographyService _cryptographyService
 
 @{
     ViewData["Title"] = "Passwords";
@@ -9,26 +11,37 @@
     <div class="w-25 mr-5">
         @await Html.PartialAsync("Partials/Menu")
     </div>
-    <div class="w-100">
-        <p>Passwords yo</p>
+    <div class="d-flex flex-column w-75">
+        <a asp-page="Create" class="btn btn-primary ml-auto mb-3">Create</a>
         
         <table class="w-100 table table-bordered">
             <thead>
             <tr>
                 <th>URL</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Password - Encrypted</th>
+                <th class="text-nowrap">Password - Decrypted</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>
-                    https://google.com
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    https://facebook.com
-                </td>
-            </tr>
+            @foreach (var password in Model.Passwords)
+            {
+                <tr>
+                    <td><a href="@(password.URL)">@(password.URL)</a></td>
+                    <td>@(password.Name)</td>
+                    <td>@(password.Username)</td>
+                    <td>@(password.Password)</td>
+                    <td>@(_cryptographyService.Decrypt(password.Password))</td>
+                    <td>
+                        <form method="post" asp-page-handler="remove">
+                            <button class="btn btn-danger">Remove</button>
+                            <input type="hidden" name="id" value="@password.Id" />
+                        </form>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
