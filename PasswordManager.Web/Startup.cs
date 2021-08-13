@@ -30,6 +30,13 @@ namespace PasswordManager.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddHsts(options =>
+            // {
+            //     options.Preload = true;
+            //     options.IncludeSubDomains = true;
+            //     options.MaxAge = TimeSpan.FromDays(365);
+            // });
+            
             // Inject configuration.
             services.AddSingleton<IConfiguration>(Configuration);
             
