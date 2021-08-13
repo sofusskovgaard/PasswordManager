@@ -2,6 +2,7 @@
 
 This project is a simple password manager that allows users to create an account, login with the account and store encrypted passwords in a MongoDB database.
 
+
 ### In a perfect world...
 
 In a perfect world this would have been a desktop application to keep the clear/non-encrypted passwords away from the server. By only encrypting and decrypting on the client using a keypair only stored on the client.

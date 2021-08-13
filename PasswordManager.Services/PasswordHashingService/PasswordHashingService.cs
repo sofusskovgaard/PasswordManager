@@ -38,7 +38,7 @@ namespace PasswordManager.Services.PasswordHashingService
         private byte[] _generateHash(string password, byte[] salt)
         {
             using var hash = new Rfc2898DeriveBytes(password, salt, 696969);
-            return hash.GetBytes(32);
+            return hash.GetBytes(64);
         }
     }
 }
